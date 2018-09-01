@@ -1,19 +1,14 @@
 ---
-layout: til_post
+layout: post
 title:  "Ruby class methods syntax"
-date:   "2018-09-01 08:22:23 +0300"
+date:   2018-09-01 08:22:23 +0300
 categories: Ruby Class Methods
-description:
-  In Ruby there are several ways how to define a class method. In this
-  article I'll go trough 4 major ways and explain what class methods
-  really are.
 ---
 
 In Ruby you are able to write class methods multiple ways.
 
 We will quickly show  4 major ways and explain how they work and when you may want to use one
 over the other:
-
 
 ### option 1  - def self.method_name
 
