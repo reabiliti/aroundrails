@@ -4,7 +4,9 @@ title:  "Deploy Ruby On Rails on Ubuntu 18.04 Bionic Beaver"
 date:   2018-08-31 02:18:17 +0300
 categories: Ruby Rails Ubuntu
 ---
+
 # Introduction
+
 We will be setting up a Ruby on Rails production environment on Ubuntu 18.04 LTS Bionic Beaver.
 
 Since we setup Ubuntu for our development environment, we also want to use it in production. This keeps your application running consistently between development and production. We're using an LTS version of Ubuntu in production because it is supported for several years where a normal version of Ubuntu isn't.
@@ -24,6 +26,41 @@ sudo adduser deploy
 sudo adduser deploy sudo
 su deploy
 ```
+
+# Config run sudo command without a password
+
+Backup your `/etc/sudoers` file by typing the following command:
+
+```
+sudo cp /etc/sudoers /root/sudoers.bak
+```
+
+Edit the `/etc/sudoers` file by typing the visudo command:
+
+```
+sudo visudo
+```
+
+Append the following entry to run ALL command without a password for a user named `deploy`:
+
+```
+deploy ALL=(ALL) NOPASSWD:ALL
+```
+
+Save and close the file. Now you can run any command as root user:
+
+```
+sudo systemctl restart nginx
+sudo reboot
+sudo apt-get install htop
+
+## get root shell ##
+sudo -i
+```
+
+# Config ssh acces via ssh-key
+
+Before we move forward is that we're going to setup SSH to authenticate via keys instead of having to use a password to login. It's more secure and will save you time in the long run.
 
 We're going to use `ssh-copy-id` to do this. If you're on OSX you may need to run `brew install ssh-copy-id` but if you're following this tutorial on Linux desktop, you should already have it.
 
