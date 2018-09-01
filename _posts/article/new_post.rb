@@ -1,16 +1,15 @@
 require 'inputs'
 require 'date'
 
-topic = Inputs.name("What is the name of the article?")
+topic = Inputs.name('What is the name of the article?')
 
-sanitized_topic = topic.downcase.gsub(/\s/,'-').gsub(/[^\w_-]/, '').squeeze('-')
+sanitized_topic = topic.downcase.gsub(/\s/, '-').gsub(/[^\w_-]/, '').squeeze('-')
 
 time = Time.now
 
 filename = "#{time.to_date}-#{sanitized_topic}.md"
 
-
-template = <<EOF
+template = <<TEMPLATE
 ---
 layout: post
 title:  "#{topic}"
@@ -19,7 +18,7 @@ categories: Ruby Rails
 ---
 ```ruby
 ```
-EOF
+TEMPLATE
 
 filepath = "_posts/#{filename}"
 File.write(filepath, template)
