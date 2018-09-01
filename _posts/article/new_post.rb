@@ -9,18 +9,16 @@ time = Time.now
 
 filename = "#{time.to_date}-#{sanitized_topic}.md"
 
-template = <<TEMPLATE
----
-layout: post
-title:  "#{topic}"
-date:   "#{time}"
-categories: Ruby Rails
----
-```ruby
-```
+template = <<-TEMPLATE.gsub(/^[\s\t]*/, '')
+  ---
+  layout: post
+  title:  "#{topic}"
+  date:   "#{time}"
+  categories: article
+  ---
 TEMPLATE
 
-filepath = "_posts/#{filename}"
+filepath = "_posts/article/#{filename}"
 File.write(filepath, template)
 
 puts "gvim #{filepath}"
