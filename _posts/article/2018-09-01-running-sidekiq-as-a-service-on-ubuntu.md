@@ -2,7 +2,8 @@
 layout: post
 title:  "Running Sidekiq as a service on Ubuntu"
 date:   2018-09-01 02:25:17 +0300
-categories: Ruby Rails Ubuntu Sidekiq Redis
+categories: article
+disq_id: 2
 ---
 
 # Introduction

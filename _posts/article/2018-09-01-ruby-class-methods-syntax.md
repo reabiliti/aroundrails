@@ -2,7 +2,8 @@
 layout: post
 title:  "Ruby class methods syntax"
 date:   2018-09-01 08:22:23 +0300
-categories: Ruby Class Methods
+categories: article
+disq_id: 3
 ---
 
 In Ruby you are able to write class methods multiple ways.
