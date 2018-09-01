@@ -12,10 +12,10 @@ filename = "#{time.to_date}-#{sanitized_topic}.md"
 
 template = <<EOF
 ---
-layout: til_post
+layout: post
 title:  "#{topic}"
 date:   "#{time}"
-categories: til
+categories: Ruby Rails
 ---
 ```ruby
 ```
