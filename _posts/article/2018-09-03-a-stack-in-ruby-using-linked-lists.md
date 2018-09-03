@@ -11,7 +11,7 @@ A [Stack][stack] is an abstract data type in programming which has a variety of 
 
 Our Stack will have 3 external methods: `push` (aliased as `<<`), `pop` and `empty?`.
 
-![Stack](/assets/images/400px-Data_stack.png)
+![Stack]({{ "/assets/images/400px-Data_stack.png" | absolute_url }})
 
 ## An overview of our classes
 
@@ -33,7 +33,7 @@ end
 
 To build a Stack we need another data type to help us out. For this we can use an Array or a [Linked List][linked-list], which we'll be using in this article. A Linked List is a simple object (we'll call it a Node) which has its own value or data, plus a pointer to the next Node in the list. The last Node in the list points to `nil`.
 
-![Linked List](/assets/images/408px-Singly-linked-list.png)
+![Linked List]({{ "/assets/images/408px-Singly-linked-list.png" | absolute_url }})
 
 ```ruby
 class Node
