@@ -23,6 +23,7 @@ github_username: reabiliti
 
 # Build settings
 markdown: kramdown
+timezone: Europe/Moscow
 theme: minima
 plugins:
   - jekyll-feed
