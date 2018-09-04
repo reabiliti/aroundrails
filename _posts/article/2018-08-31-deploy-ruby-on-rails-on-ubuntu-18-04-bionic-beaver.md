@@ -42,9 +42,9 @@ deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
 deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
 # deb-src http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
 
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
-## team, and may not be under a free licence. Please satisfy yourself as to 
-## your rights to use the software. Also, please note that software in 
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
 ## multiverse WILL NOT receive any review or updates from the Ubuntu
 ## security team.
 deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
@@ -376,11 +376,11 @@ One last time, ssh into your server as the `deploy` user and this time we need t
 production:
   adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= Rails.application.credentials[:pghost] %>
-  user: <%= Rails.application.credentials[:user] %>
-  password: <%= Rails.application.credentials[:pgpass] %>
+  host: <%= ENV.fetch('PGHOST') %>
+  user: <%= ENV.fetch('PGUSER') %>
+  password: <%= ENV.fetch('PGPASS') %>
   timeout: 5000
-  database: my_app_name_production
+  database: <%= ENV.fetch('PGDATABASE') %>
 ```
 
 To do this, let's skip it on ssh
@@ -395,11 +395,17 @@ Next, we need to copy the `master.key`
 scp config/master.key deploy@192.168.88.244:/home/deploy/my_app_name/shared/config/master.key
 ```
 
+We also need to store the environment variables, for this purpose I chose the `dotenv-rails` gem and the file name `.env.production`. The next team will copy it the same:
+
+```
+scp .env.production deploy@192.168.88.244:/home/deploy/my_app_name/shared/.env.production
+```
+
 You can run `cap production deploy` one last time to get your full deployment to run. This should completed successfully and you should see your new site live! You can just run Capistrano again to deploy any new changes you've pushed up to your Git repository.
 
 ## Restarting The Site
 
-One last thing you should know is that restarting just the Rails application with Passenger is very easy. If you ssh into the server, you can run `touch my_app_name/current/tmp/restart.txt` and Passenger will restart the application for you. It monitors the file's timestamp to determine if it should restart the app. This is helpful when you want to restart the app manually without deploying it.
+One last thing you should know is that restarting just the Rails application with Passenger is very easy. If you ssh into the server, you can run `touch my_app_name/current/tmp/restart.txt` or `sudo passenger-config restart-app` and Passenger will restart the application for you. It monitors the file's timestamp to determine if it should restart the app. This is helpful when you want to restart the app manually without deploying it.
 
 ## Conclusion
 
