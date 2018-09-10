@@ -96,60 +96,77 @@ Rule added
 Rule added (v6)
 ```
 
-# Add Sidekiq as service
+# Integration Sidekiq with systemd
 
-Sidekiq auto start using systemd unit file for Ubuntu 18.04.
-
-Put this in `/lib/systemd/system/sidekiq.service` by executing the below command:
+Add `capistrano-sidekiq` to your `Gemfile`
 
 ```
-$ sudo vim /lib/systemd/system/sidekiq.service
+gem 'capistrano-sidekiq' , group: :development
 ```
 
-And add the following settings taken from the [file][sidekiq-service-gist]:
+Load the following in your `Capfile`
 
 ```
-[Unit]
-Description=sidekiq
-# start us only once the network and logging subsystems are available,
-# consider adding redis-server.service if Redis is local and systemd-managed.
-After=syslog.target network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/home/Public/Rails/your-rails-app
-ExecStart=/home/deploy/.rbenv/bin/rbenv exec bundle exec sidekiq -e production -c 3 -q mailers -q default
-User=deploy
-Group=deploy
-UMask=0002
-
-# if we crash, restart
-RestartSec=1
-Restart=on-failure
-
-# output goes to /var/log/syslog
-StandardOutput=syslog
-StandardError=syslog
-
-# This will default to "bundler" if we don't specify it
-SyslogIdentifier=sidekiq
-
-[Install]
-WantedBy=multi-user.target
+require 'capistrano/sidekiq'
 ```
 
-Then turn on the service with the following commands:
+Load the following in your `config/deploy.rb`
 
 ```
-$ systemctl enable sidekiq # to enable sidekiq service
-$ systemctl {start,stop,restart} sidekiq # to start sidekiq service
+# Sidekiq
+set :bundler_path, "/home/deploy/.rbenv/bin/rbenv exec bundle"
+set :init_system, :systemd
+set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
 ```
 
-This file corresponds to a single Sidekiq process. Add multiple copies to run multiple processes (sidekiq-1, sidekiq-2, etc).
+Create configuration file `config/sidekiq.yml`
 
-See [Inspeqtor's Systemd][inspeqtor-systemd-wiki] wiki page for more detail about Systemd:
+```
+:concurrency: 1
+:pidfile: tmp/pids/sidekiq.pid
+:logfile: log/sidekiq.log
+staging:
+  :concurrency: 2
+production:
+  :concurrency: 10
+:queues:
+  - default
+  - mailers
+```
+
+`capistrano-sidekiq` adds some default hooks:
+
+```
+task :add_default_hooks do
+  after 'deploy:starting', 'sidekiq:quiet'
+  after 'deploy:updated', 'sidekiq:stop'
+  after 'deploy:reverted', 'sidekiq:stop'
+  after 'deploy:published', 'sidekiq:start'
+end
+```
+
+Run `cap -T sidekiq` in the terminal to get a full list of the sidekiq commands:
+
+```
+cap sidekiq:quiet                  # Quiet sidekiq (stop processing new tasks)
+cap sidekiq:respawn                # Respawn missing sidekiq proccesses
+cap sidekiq:restart                # Restart sidekiq
+cap sidekiq:rolling_restart        # Rolling-restart sidekiq
+cap sidekiq:start                  # Start sidekiq
+cap sidekiq:stop                   # Stop sidekiq
+```
+
+Install systemd.service template file and enable the service with:
+
+```
+cap stage sidekiq:install
+```
+
+Default name for the service file is `sidekiq-stage.service`. This can be changed as needed, for example:
+
+```
+set :service_unit_name, "sidekiq-#{fetch(:application)}-#{fetch(:stage)}.service"
+```
 
 [sidekiq-github]: https://github.com/mperham/sidekiq
 [redis-site]: https://redis.io/
-[sidekiq-service-gist]: https://gist.github.com/reabiliti/7204115b433e7bd986343d7709f05c2a
-[inspeqtor-systemd-wiki]: https://github.com/mperham/inspeqtor/wiki/Systemd
