@@ -98,25 +98,37 @@ Rule added (v6)
 
 # Integration Sidekiq with systemd
 
-Add `capistrano-sidekiq` to your `Gemfile`
+Add template service `lib/services/sidekiq-staging.service`
 
 ```
-gem 'capistrano-sidekiq' , group: :development
-```
+[Unit]
+Description=sidekiq for staging
+After=syslog.target network.target
 
-Load the following in your `Capfile`
+[Service]
+Type=simple
+WorkingDirectory=/home/deploy/techstyle/current
+ExecStart=/bin/bash -lc '/home/deploy/.rbenv/shims/bundle exec sidekiq -e staging -C config/sidekiq.yml'
+ExecReload=/bin/kill -TSTP $MAINPID
+ExecStop=/bin/kill -TERM $MAINPID
 
-```
-require 'capistrano/sidekiq'
-```
+User=deploy
+Group=deploy
+UMask=0002
 
-Load the following in your `config/deploy.rb`
+# if we crash, restart
+RestartSec=1
+Restart=on-failure
 
-```
-# Sidekiq
-set :bundler_path, "/home/deploy/.rbenv/bin/rbenv exec bundle"
-set :init_system, :systemd
-set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
+# output goes to /var/log/syslog
+StandardOutput=syslog
+StandardError=syslog
+
+# This will default to "bundler" if we don't specify it
+SyslogIdentifier=sidekiq
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 Create configuration file `config/sidekiq.yml`
@@ -134,14 +146,63 @@ production:
   - mailers
 ```
 
-`capistrano-sidekiq` adds some default hooks:
+add capistrano tasks for sidekiq `lib/capistrano/tasks/sidekiq.rake`
 
 ```
-task :add_default_hooks do
+namespace :sidekiq do
   after 'deploy:starting', 'sidekiq:quiet'
+  after 'deploy:updating', 'sidekiq:update'
   after 'deploy:updated', 'sidekiq:stop'
   after 'deploy:reverted', 'sidekiq:stop'
   after 'deploy:published', 'sidekiq:start'
+  after 'deploy:failed', 'sidekiq:restart'
+
+  desc 'Update sidekiq service'
+  task :update do
+    on roles(:app) do
+      file_path = "#{release_path}/lib/services/sidekiq-#{fetch(:stage)}.service"
+      service = '/lib/systemd/system/sidekiq.service'
+      config_exists = test("[ -f #{service} ]")
+      if config_exists && test("diff #{service} #{file_path}")
+        # no-op
+      else
+        if config_exists
+          execute :sudo, 'systemctl', 'disable', 'sidekiq.service', raise_on_non_zero_exit: false
+        end
+        execute :sudo, 'cp', '--remove-destination', file_path, service
+        execute :sudo, 'systemctl', 'daemon-reload'
+        execute :sudo, 'systemctl', 'enable', 'sidekiq.service'
+      end
+    end
+  end
+
+  desc 'Quiet sidekiq (stop fetching new tasks from Redis)'
+  task :quiet do
+    on roles(:app) do
+      execute :sudo, :systemctl, :reload, 'sidekiq.service', raise_on_non_zero_exit: false
+    end
+  end
+
+  desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
+  task :stop do
+    on roles(:app) do
+      execute :sudo, :systemctl, :stop, 'sidekiq.service'
+    end
+  end
+
+  desc 'Start sidekiq'
+  task :start do
+    on roles(:app) do
+      execute :sudo, :systemctl, :start, 'sidekiq.service'
+    end
+  end
+
+  desc 'Restart sidekiq'
+  task :restart do
+    on roles(:app) do
+      execute :sudo, :systemctl, :restart, 'sidekiq.service'
+    end
+  end
 end
 ```
 
@@ -149,23 +210,9 @@ Run `cap -T sidekiq` in the terminal to get a full list of the sidekiq commands:
 
 ```
 cap sidekiq:quiet                  # Quiet sidekiq (stop processing new tasks)
-cap sidekiq:respawn                # Respawn missing sidekiq proccesses
 cap sidekiq:restart                # Restart sidekiq
-cap sidekiq:rolling_restart        # Rolling-restart sidekiq
 cap sidekiq:start                  # Start sidekiq
 cap sidekiq:stop                   # Stop sidekiq
-```
-
-Install systemd.service template file and enable the service with:
-
-```
-cap stage sidekiq:install
-```
-
-Default name for the service file is `sidekiq-stage.service`. This can be changed as needed, for example:
-
-```
-set :service_unit_name, "sidekiq-#{fetch(:application)}-#{fetch(:stage)}.service"
 ```
 
 [sidekiq-github]: https://github.com/mperham/sidekiq
