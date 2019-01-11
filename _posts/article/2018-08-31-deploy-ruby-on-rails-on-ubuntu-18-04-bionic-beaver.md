@@ -327,17 +327,17 @@ Thankfully there aren't a whole lot of things to do left!
 
 In order to get Nginx to respond with the Rails app, we need to modify it's sites-enabled.
 
-Open up `/etc/nginx/sites-enabled/default` in your text editor and we will replace the file's contents with the following:
+Open up `/etc/nginx/sites-available/production.my_app.host` in your text editor and we will replace the file's contents with the following:
 
 ```
 server {
         listen 80;
         listen [::]:80 ipv6only=on;
-
-        server_name mydomain.com;
+        
+        server_name production.my_app.host;
         passenger_enabled on;
         rails_env    production;
-        root         /home/deploy/my_app_name/current/public;
+        root         /home/deploy/my_app/current/public;
 
         # redirect server error pages to the static page /50x.html
         error_page   500 502 503 504  /50x.html;
@@ -348,6 +348,23 @@ server {
 ```
 
 This is our Nginx configuration for a server listening on port 80. You need to change the `server_name` values to match the domain you want to use and in `root` replace `my_app_name` with the name of your application.
+
+Next created link on site config:
+
+```
+sudo ln -s /etc/nginx/sites-available/production.my_app.host /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+```
+
+## Install Certbot for https certificate
+
+Need before configuring domain name.
+
+```
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get install python-certbot-nginx
+sudo certbot --nginx
+```
 
 ## Connecting The Database
 
