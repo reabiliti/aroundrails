@@ -2,6 +2,7 @@
 layout: post
 title:  "Ruby class methods syntax"
 date:   2018-09-01 08:22:23 +0300
+last_modified_at: 2018-09-01T21:14:51+03:00
 categories: article
 ---
 

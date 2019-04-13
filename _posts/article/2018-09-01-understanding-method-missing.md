@@ -2,6 +2,7 @@
 layout: post
 title:  "Understanding method missing"
 date:   "2018-09-01 20:42:26 +0300"
+last_modified_at: 2018-09-01T21:14:51+03:00
 categories: article
 ---
 

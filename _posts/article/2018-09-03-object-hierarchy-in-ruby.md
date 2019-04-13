@@ -2,6 +2,7 @@
 layout: post
 title:  "Object hierarchy in Ruby"
 date:   "2018-09-03 02:42:58 +0300"
+last_modified_at: 2018-09-03T03:08:28+03:00
 categories: article
 ---
 

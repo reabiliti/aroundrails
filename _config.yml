@@ -27,6 +27,8 @@ timezone: Europe/Moscow
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-last-modified-at
 
 permalink: /:categories/:title.html
 

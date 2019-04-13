@@ -12,8 +12,9 @@ filename = "#{time.to_date}-#{sanitized_topic}.md"
 template = <<-TEMPLATE.gsub(/^[\s\t]*/, '')
   ---
   layout: post
-  title:  "#{topic}"
-  date:   "#{time}"
+  title: "#{topic}"
+  date: "#{time}"
+  last_modified_at: "#{time}"
   categories: article
   ---
 TEMPLATE
