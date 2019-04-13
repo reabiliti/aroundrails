@@ -3,7 +3,7 @@ layout: post
 title:  "Understanding method missing"
 date:   "2018-09-01 20:42:26 +0300"
 last_modified_at: 2018-09-01T21:14:51+03:00
-categories: article
+categories: ruby
 ---
 
 In this article we are going to look at `method_missing` and `respond_to_missing?` in order to see what they do and how they can be used. We're going to re-create the [StringInquirer][string_inquirer] class in Ruby on Rails as a way to demonstrate what is happening and how it can be used in real applications.

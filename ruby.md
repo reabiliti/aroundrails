@@ -1,7 +1,7 @@
 ---
-layout: article_listing
-title: Articles
-permalink: /article/
+layout: ruby
+title: Ruby
+permalink: /ruby/
 redirect_from:
   - "/articles"
   - "/blogs"
