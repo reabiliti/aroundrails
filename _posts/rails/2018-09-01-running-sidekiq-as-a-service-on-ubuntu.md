@@ -3,7 +3,7 @@ layout: post
 title: "Running Sidekiq as a service on Ubuntu"
 date: 2018-09-01 02:25:17 +0300
 last_modified_at: 2018-10-03T22:38:58+03:00
-categories: article
+categories: rails
 ---
 
 # Introduction

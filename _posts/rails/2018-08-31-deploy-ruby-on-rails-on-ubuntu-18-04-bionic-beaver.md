@@ -3,7 +3,7 @@ layout: post
 title: "Deploy Ruby On Rails on Ubuntu 18.04 Bionic Beaver"
 date: 2018-08-31 02:18:17 +0300
 last_modified_at: 2019-04-13 17:34:00 +0300
-categories: article
+categories: rails
 ---
 
 # Introduction

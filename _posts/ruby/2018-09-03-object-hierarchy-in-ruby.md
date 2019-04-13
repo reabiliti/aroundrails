@@ -3,7 +3,7 @@ layout: post
 title:  "Object hierarchy in Ruby"
 date:   "2018-09-03 02:42:58 +0300"
 last_modified_at: 2018-09-03T03:08:28+03:00
-categories: article
+categories: ruby
 ---
 
 As a way to better understand how Ruby works, I started to dive into how object hierarchies work in the language. We're going to be covering the default ancestry chain in Ruby, how to create your own ancestors, and what the base level objects in Ruby actually do.

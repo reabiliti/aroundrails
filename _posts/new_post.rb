@@ -1,7 +1,12 @@
 require 'inputs'
 require 'date'
+require 'fileutils'
 
-topic = Inputs.name('What is the name of the article?')
+topic = Inputs.name('What is the name of the post?')
+category = Inputs.name('What is the category of the post?')
+
+dirname = "_posts/#{category}"
+FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
 
 sanitized_topic = topic.downcase.gsub(/\s/, '-').gsub(/[^\w_-]/, '').squeeze('-')
 
@@ -15,11 +20,11 @@ template = <<-TEMPLATE.gsub(/^[\s\t]*/, '')
   title: "#{topic}"
   date: "#{time}"
   last_modified_at: "#{time}"
-  categories: article
+  categories: #{category}
   ---
 TEMPLATE
 
-filepath = "_posts/article/#{filename}"
+filepath = "#{dirname}/#{filename}"
 File.write(filepath, template)
 
-puts "gvim #{filepath}"
+puts "created #{filepath}"

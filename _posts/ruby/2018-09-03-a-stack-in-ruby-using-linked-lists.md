@@ -3,7 +3,7 @@ layout: post
 title:  "A Stack in Ruby using Linked Lists"
 date:   "2018-09-03 07:36:01 +0300"
 last_modified_at: 2018-09-03T08:25:49+03:00
-categories: article
+categories: ruby
 ---
 
 # What is a Stack?
