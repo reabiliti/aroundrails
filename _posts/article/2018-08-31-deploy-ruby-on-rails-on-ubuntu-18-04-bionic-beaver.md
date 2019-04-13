@@ -19,7 +19,7 @@ Also replace Ubuntu 18.04 Bionic default `/etc/apt/sources.list` for the [next l
 sudo vim /etc/apt/sources.list
 ```
 
-Content:
+Content (need check this):
 
 ```
 #deb cdrom:[Ubuntu 18.04 LTS _Bionic Beaver_ - Release amd64 (20180426)]/ bionic main restricted
@@ -103,7 +103,7 @@ Edit the `/etc/sudoers` file by typing the visudo command:
 sudo visudo
 ```
 
-Append the following entry to run ALL command without a password for a user named `deploy`:
+Append the following entry to run ALL command without a password for a user named `deploy` at the end of the file:
 
 ```
 deploy ALL=(ALL) NOPASSWD:ALL
@@ -120,7 +120,7 @@ sudo apt-get install htop
 sudo -i
 ```
 
-# Config ssh acces via ssh-key
+# Config ssh access via ssh-key
 
 Before we move forward is that we're going to setup SSH to authenticate via keys instead of having to use a password to login. It's more secure and will save you time in the long run.
 
@@ -143,6 +143,7 @@ Now when you run `ssh deploy@IPADDRESS` you will be logged in automatically. Go 
 The first step is to install some dependencies for Ruby and Rails.
 
 To make sure we have everything necessary for Webpacker support in Rails, we're first going to start by adding the Node.js and Yarn repositories to our system before installing them.
+
 
 ```
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
@@ -169,8 +170,8 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
 exec $SHELL
 
-rbenv install 2.5.1
-rbenv global 2.5.1
+rbenv install 2.6.1
+rbenv global 2.6.1
 ruby -v
 ```
 
@@ -295,7 +296,7 @@ require 'capistrano/passenger'
 require 'capistrano/rbenv'
 require "capistrano/bundler"
 set :rbenv_type, :user
-set :rbenv_ruby, '2.5.1'
+set :rbenv_ruby, '2.6.1'
 ```
 
 After we've got Capistrano installed, we can configure the `config/deploy.rb` to setup our general configuration for our app. Edit that file and make it like the following replacing `my_app_name` with the name of your application and git repository:
@@ -415,7 +416,7 @@ scp config/master.key deploy@192.168.88.244:/home/deploy/my_app_name/shared/conf
 We also need to store the environment variables, for this purpose I chose the `dotenv-rails` gem and the file name `.env.production`. The next team will copy it the same:
 
 ```
-scp .env.production deploy@192.168.88.244:/home/deploy/my_app_name/shared/.env.production
+scp .env.production deploy@192.168.88.244:/home/deploy/my_app_name/shared/.env
 ```
 
 You can run `cap production deploy` one last time to get your full deployment to run. This should completed successfully and you should see your new site live! You can just run Capistrano again to deploy any new changes you've pushed up to your Git repository.
