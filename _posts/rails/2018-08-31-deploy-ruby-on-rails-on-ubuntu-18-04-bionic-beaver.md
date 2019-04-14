@@ -10,11 +10,13 @@ categories: rails
 
 We will be setting up a Ruby on Rails production environment on Ubuntu 18.04 LTS Bionic Beaver.
 
-Since we setup Ubuntu for our development environment, we also want to use it in production. This keeps your application running consistently between development and production. We're using an LTS version of Ubuntu in production because it is supported for several years where a normal version of Ubuntu isn't.
+Since we setup Ubuntu for our development environment, we also want to use it in production.
+This keeps your application running consistently between development and production. We're using an LTS
+version of Ubuntu in production because it is supported for several years where a normal version of Ubuntu isn't.
 
 First you need a clean system Ubuntu 18.04 Bionic Bever Server.
 
-Also replace Ubuntu 18.04 Bionic default `/etc/apt/sources.list` for the [next list][sources.list].
+Also replace Ubuntu 18.04 Bionic default `/etc/apt/sources.list` for the [next list][sources.list]{:target="_blank"}.
 
 ```
 sudo vim /etc/apt/sources.list
@@ -123,9 +125,11 @@ sudo -i
 
 # Config ssh access via ssh-key
 
-Before we move forward is that we're going to setup SSH to authenticate via keys instead of having to use a password to login. It's more secure and will save you time in the long run.
+Before we move forward is that we're going to setup SSH to authenticate via keys instead of having to use a password to login.
+It's more secure and will save you time in the long run.
 
-We're going to use `ssh-copy-id` to do this. If you're on OSX you may need to run `brew install ssh-copy-id` but if you're following this tutorial on Linux desktop, you should already have it.
+We're going to use `ssh-copy-id` to do this. If you're on OSX you may need to run `brew install ssh-copy-id` but if you're
+following this tutorial on Linux desktop, you should already have it.
 
 Once you've got `ssh-copy-id` installed, run the following and replace IPADDRESS with the one for your server:
 
@@ -135,7 +139,8 @@ Once you've got `ssh-copy-id` installed, run the following and replace IPADDRESS
 ssh-copy-id deploy@IPADDRESS
 ```
 
-Now when you run `ssh deploy@IPADDRESS` you will be logged in automatically. Go ahead and SSH again and verify that it doesn't ask for your password before moving onto the next step.
+Now when you run `ssh deploy@IPADDRESS` you will be logged in automatically. Go ahead and SSH again and verify that it
+doesn't ask for your password before moving onto the next step.
 
 > For the next steps, **make sure you are logged in as the deploy user on the server!**
 
@@ -143,8 +148,8 @@ Now when you run `ssh deploy@IPADDRESS` you will be logged in automatically. Go 
 
 The first step is to install some dependencies for Ruby and Rails.
 
-To make sure we have everything necessary for Webpacker support in Rails, we're first going to start by adding the Node.js and Yarn repositories to our system before installing them.
-
+To make sure we have everything necessary for Webpacker support in Rails, we're first going to start by adding the Node.js
+and Yarn repositories to our system before installing them.
 
 ```
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
@@ -154,7 +159,10 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 sudo apt-get update
 sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev nodejs yarn
 ```
-Next we're going to be installing Ruby using one of three methods. Each have their own benefits, most people prefer using rbenv these days, but if you're familiar with rvm you can follow those steps as well. I've included instructions for installing from source as well, but in general, you'll want to choose either rbenv or rvm.
+
+Next we're going to be installing Ruby using one of three methods. Each have their own benefits, most people prefer using
+rbenv these days, but if you're familiar with rvm you can follow those steps as well. I've included instructions for
+installing from source as well, but in general, you'll want to choose either `rbenv` or `rvm`.
 
 Choose one method. Some of these conflict with each other, so choose the one that sounds the most interesting to you, or go with my suggestion, rbenv.
 
@@ -222,7 +230,8 @@ Open up the server's IP address in your browser to make sure that nginx is up an
 
 The `systemctl` command also provides some other methods such as `restart` and `stop` that allow you to easily restart and stop your webserver.
 
-Next, we need to update the Nginx configuration to point Passenger to the version of Ruby that we're using. You'll want to open up `/etc/nginx/conf.d/mod-http-passenger.conf` in your favorite editor. I like to use `vim`, so I'd run this command:
+Next, we need to update the Nginx configuration to point Passenger to the version of Ruby that we're using.
+You'll want to open up `/etc/nginx/conf.d/mod-http-passenger.conf` in your favorite editor. I like to use `vim`, so I'd run this command:
 
 ```
 sudo vim /etc/nginx/conf.d/mod-http-passenger.conf
@@ -247,7 +256,8 @@ Once you've changed `passenger_ruby` to use the right version Ruby, you can run 
 sudo systemctl restart nginx
 ```
 
-Now that we've restarted Nginx, the Rails application will be served up using the deploy user just how we want. In the Capistrano section we will talk about configuring Nginx to serve up your Rails application.
+Now that we've restarted Nginx, the Rails application will be served up using the deploy user just how we want.
+In the Capistrano section we will talk about configuring Nginx to serve up your Rails application.
 
 # Installing PostgreSQL
 
@@ -271,7 +281,10 @@ The password you type in here will be the one to put in your `my_app/current/con
 
 > For Capistrano, **make sure you do these steps on your development machine inside your Rails app.**
 
-Capistrano is a Ruby library that we'll use to deploy our code to our production server. It will maintain a copy of our git repo on the server and a set of release folders. Each release is a copy of our app whenever it was deployed and we'll have a current symlink that will be what's running in production. That will point to which release is currently running and allow us to easily rollback to previous releases should something go wrong.
+Capistrano is a Ruby library that we'll use to deploy our code to our production server. It will maintain a copy of
+our git repo on the server and a set of release folders. Each release is a copy of our app whenever it was deployed
+and we'll have a current symlink that will be what's running in production. That will point to which release is
+currently running and allow us to easily rollback to previous releases should something go wrong.
 
 The first step is to add Capistrano to your `Gemfile`:
 
@@ -300,7 +313,8 @@ set :rbenv_type, :user
 set :rbenv_ruby, '2.6.1'
 ```
 
-After we've got Capistrano installed, we can configure the `config/deploy.rb` to setup our general configuration for our app. Edit that file and make it like the following replacing `my_app_name` with the name of your application and git repository:
+After we've got Capistrano installed, we can configure the `config/deploy.rb` to setup our general configuration for our app.
+Edit that file and make it like the following replacing `my_app_name` with the name of your application and git repository:
 
 ```
 set :application, 'my_app_name'
@@ -319,7 +333,7 @@ Now we need to open up our `config/deploy/production.rb` file to set the server 
 server '127.0.0.1', user: 'deploy', roles: %w{app db web}
 ```
 
-If you have any trouble with Capistrano or the extensions for it, check out [Capistrano's Github page][capistrano-github].
+If you have any trouble with Capistrano or the extensions for it, check out [Capistrano's Github page][capistrano-github]{:target="_blank"}.
 
 # Final Steps
 
@@ -349,7 +363,8 @@ server {
 }
 ```
 
-This is our Nginx configuration for a server listening on port 80. You need to change the `server_name` values to match the domain you want to use and in `root` replace `my_app_name` with the name of your application.
+This is our Nginx configuration for a server listening on port 80. You need to change the `server_name` values to match
+the domain you want to use and in `root` replace `my_app_name` with the name of your application.
 
 Next created link on site config:
 
@@ -370,7 +385,9 @@ sudo certbot --nginx
 
 ## Connecting The Database
 
-One optional thing I would recommend is to remove your `config/database.yml` and `config/master.key` git and only store example copies in your git repo. This way we can easily copy the files for setting up development, but our production environment can symlink files on the server so that our production secrets and passwords are only stored on the production server.
+One optional thing I would recommend is to remove your `config/database.yml` and `config/master.key` git and only store
+example copies in your git repo. This way we can easily copy the files for setting up development, but our production
+environment can symlink files on the server so that our production secrets and passwords are only stored on the production server.
 
 First we'll move these files to their example names in the git repo.
 
@@ -382,13 +399,15 @@ git commit -m "Only store example secrets and database configs"
 cp config/database.yml.example config/database.yml
 ```
 
-You can run `cap production deploy` to deploy your application, but it's going to fail this first time because we haven't created either of these files on the server which we will do in just a second.
+You can run `cap production deploy` to deploy your application, but it's going to fail this first time because we haven't
+created either of these files on the server which we will do in just a second.
 
 ```
 linked file /home/deploy/my_app_name/shared/config/database.yml does not exist on IP_ADDRESS
 ```
 
-One last time, ssh into your server as the `deploy` user and this time we need to create two files. First is the `database.yml` that uses the password for the postgres user you created earlier.
+One last time, ssh into your server as the `deploy` user and this time we need to create two files. First is the `database.yml`
+that uses the password for the postgres user you created earlier.
 
 ```
 # /home/deploy/my_app_name/shared/config/database.yml
@@ -420,15 +439,20 @@ We also need to store the environment variables, for this purpose I chose the `d
 scp .env.production deploy@192.168.88.244:/home/deploy/my_app_name/shared/.env
 ```
 
-You can run `cap production deploy` one last time to get your full deployment to run. This should completed successfully and you should see your new site live! You can just run Capistrano again to deploy any new changes you've pushed up to your Git repository.
+You can run `cap production deploy` one last time to get your full deployment to run. This should completed successfully and you
+should see your new site live! You can just run Capistrano again to deploy any new changes you've pushed up to your Git repository.
 
 ## Restarting The Site
 
-One last thing you should know is that restarting just the Rails application with Passenger is very easy. If you ssh into the server, you can run `touch my_app_name/current/tmp/restart.txt` or `sudo passenger-config restart-app` and Passenger will restart the application for you. It monitors the file's timestamp to determine if it should restart the app. This is helpful when you want to restart the app manually without deploying it.
+One last thing you should know is that restarting just the Rails application with Passenger is very easy. If you ssh into
+the server, you can run `touch my_app_name/current/tmp/restart.txt` or `sudo passenger-config restart-app` and Passenger will
+restart the application for you. It monitors the file's timestamp to determine if it should restart the app. This is helpful
+when you want to restart the app manually without deploying it.
 
 ## Conclusion
 
-And there you have it, a very long-winded explanation of all the different things you need to do while setting up an application to be deployed. There is a lot of system administration pieces that can expand upon this, but that's for another time. Please let me know if you have any questions, comments, or suggestions!
+And there you have it, a very long-winded explanation of all the different things you need to do while setting up an application
+to be deployed. There is a lot of system administration pieces that can expand upon this, but that's for another time.
 
 [sources.list]: https://gist.github.com/reabiliti/71f949b2bf4817e3a21e78016cf049ca
 [capistrano-github]: https://github.com/capistrano
