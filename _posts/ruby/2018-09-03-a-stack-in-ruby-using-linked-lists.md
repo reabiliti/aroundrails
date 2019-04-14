@@ -8,7 +8,9 @@ categories: ruby
 
 # What is a Stack?
 
-A [Stack][stack] is an abstract data type in programming which has a variety of uses. The basic premise of a Stack is that you can add a new value to the end (pushing), and you can remove the last value off of the end. This is referred to as LIFO - Last In First Out.
+A [Stack][stack]{:target="_blank"} is an abstract data type in programming which has a variety of uses.
+The basic premise of a Stack is that you can add a new value to the end (pushing), and you can remove the last value off of the end.
+This is referred to as LIFO - Last In First Out.
 
 Our Stack will have 3 external methods: `push` (aliased as `<<`), `pop` and `empty?`.
 
@@ -32,7 +34,9 @@ end
 
 # What is a Linked List?
 
-To build a Stack we need another data type to help us out. For this we can use an Array or a [Linked List][linked-list], which we'll be using in this article. A Linked List is a simple object (we'll call it a Node) which has its own value or data, plus a pointer to the next Node in the list. The last Node in the list points to `nil`.
+To build a Stack we need another data type to help us out. For this we can use an Array or a [Linked List][linked-list]{:target="_blank"},
+which we'll be using in this article. A Linked List is a simple object (we'll call it a Node) which has its own value or data,
+plus a pointer to the next Node in the list. The last Node in the list points to `nil`.
 
 ![Linked List]({{ "/assets/images/408px-Singly-linked-list.png" | absolute_url }})
 
@@ -59,7 +63,8 @@ end
 
 # Pushing a new value to the Stack
 
-To push a value to the Stack we'll want to create a new Node which has a next Node equal to the current first Node. Then we'll set the first Node equal to the new one we just created. Because Ruby is evaluated from right to left, we can do it in a single line of code.
+To push a value to the Stack we'll want to create a new Node which has a next Node equal to the current first Node.
+Then we'll set the first Node equal to the new one we just created. Because Ruby is evaluated from right to left, we can do it in a single line of code.
 
 ```ruby
 def push(value)

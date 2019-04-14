@@ -6,17 +6,21 @@ last_modified_at: 2018-09-01T21:14:51+03:00
 categories: ruby
 ---
 
-In this article we are going to look at `method_missing` and `respond_to_missing?` in order to see what they do and how they can be used. We're going to re-create the [StringInquirer][string_inquirer] class in Ruby on Rails as a way to demonstrate what is happening and how it can be used in real applications.
+In this article we are going to look at `method_missing` and `respond_to_missing?` in order to see what they do and how
+they can be used. We're going to re-create the [StringInquirer][string_inquirer]{:target="_blank"} class in Ruby on Rails
+as a way to demonstrate what is happening and how it can be used in real applications.
 
 # What is StringInquirer
 
-If you've used Rails you've probably had to check at one point or another which environment your app is running in. To do this you probably called `Rails.env.staging?`. What I didn't know until recently was that `env` was an instance of the StringInquirer class.
+If you've used Rails you've probably had to check at one point or another which environment your app is running in.
+To do this you probably called `Rails.env.staging?`. What I didn't know until recently was that `env` was an instance of the StringInquirer class.
 
 StringInquirer allows you to check if a String is equal to something by asking it `staging?` rather than `env == 'staging'`.
 
 # NoMethodError
 
-You've probably seen the NoMethodError exception many times while programming Ruby. The code below will produce the NoMethodError exception because the method `happy?` doesn't exist.
+You've probably seen the NoMethodError exception many times while programming Ruby. The code below will produce
+the NoMethodError exception because the method `happy?` doesn't exist.
 
 ```ruby
 class StringInquirer < String
@@ -26,9 +30,12 @@ mood = StringInquirer.new("happy")
 mood.happy?
 ```
 
-When you call `happy`? Ruby will check to see if your object 'responds to' this method... or in other words, if a method exists with that name either in the current object, or any other class up the hierarchy chain.
+When you call `happy`? Ruby will check to see if your object 'responds to' this method... or in other words,
+if a method exists with that name either in the current object, or any other class up the hierarchy chain.
 
-In this case it can't find the method `happy?` so it raises the exception; but Ruby allows us to implement a method called `method_missing` which is called as a last ditch attempt to find a receiver for this method call. `method_missing` receives the name of the method that was being called along with the rest of the arguments that were passed to the method we wanted to call.
+In this case it can't find the method `happy?` so it raises the exception; but Ruby allows us to implement a method
+called `method_missing` which is called as a last ditch attempt to find a receiver for this method call.
+`method_missing` receives the name of the method that was being called along with the rest of the arguments that were passed to the method we wanted to call.
 
 If we add `method_missing` to our class and print out the values passed to it, we can get an idea of what we're working with.
 
@@ -50,7 +57,9 @@ Which will print out the following:
 []
 ```
 
-Using this knowledge, we want to check if the `method_name` ends with a question mark and, if so, check to see if the beginning of the method name is equal to the value of our string. If it doesn't end with a question mark, we can call `super` passing off responsibility to some parent class.
+Using this knowledge, we want to check if the `method_name` ends with a question mark and, if so, check to see if
+the beginning of the method name is equal to the value of our string. If it doesn't end with a question mark,
+we can call `super` passing off responsibility to some parent class.
 
 ```ruby
 class StringInquirer < String
@@ -70,7 +79,8 @@ This updated code now correctly returns `true` when asking `happy?` and will ret
 
 # Does my object respond to?
 
-Sometimes before you call a method you want to first ask your object if it will be able to respond to this method. To do this you can use the method `respond_to?` passing the method name to the method.
+Sometimes before you call a method you want to first ask your object if it will be able to respond to this method.
+To do this you can use the method `respond_to?` passing the method name to the method.
 
 ```ruby
 "Happy".respond_to?(:length) # => true
@@ -80,7 +90,8 @@ But because our question mark methods `happy?` or `sad?` don't actually exist, i
 
 There is one other method we can implement to help us handle the case where it can't find a concrete method to call. This is `respond_to_missing?`.
 
-`respond_to_missing?` receives the name of the method and another value called include_private which we won't worry about now. In our case, we basically want to check if the method being called ends with a question mark or not.
+`respond_to_missing?` receives the name of the method and another value called include_private which we won't worry about now.
+In our case, we basically want to check if the method being called ends with a question mark or not.
 
 This leads us to our final implementation of the `StringInquirer` class, which has implemented both `method_missing` and `respond_to_missing?`.
 
@@ -113,9 +124,13 @@ p mood.respond_to?(:happy?) # => true
 
 # Concluding thoughts
 
-We've covered the use of 2 methods (methodmissing and respondto_missing?) to perform a little bit of what is called "Meta Programming". Allowing our code to ask questions about itself and create new functionality on the fly.
+We've covered the use of 2 methods (methodmissing and respondto_missing?) to perform a little bit of what is called "Meta Programming".
+Allowing our code to ask questions about itself and create new functionality on the fly.
 
-When you want to add a little 'syntactic sugar' to your code, perhaps using these 2 methods will help you achieve that. Worst case scenario is that you've come away with knowledge of how the StringInquirer class - which is part of the ActiveSupport module of Rails - works. The next time you use `Rails.env.development?` you'll know what is happening. Recommend [Metaprogramming Ruby 2][metaprogramming-ruby-2] to go deeper on this subject.
+When you want to add a little 'syntactic sugar' to your code, perhaps using these 2 methods will help you achieve that.
+Worst case scenario is that you've come away with knowledge of how the StringInquirer class - which is part of the ActiveSupport module of Rails - works.
+The next time you use `Rails.env.development?` you'll know what is happening. Recommend [Metaprogramming Ruby 2][metaprogramming-ruby-2]{:target="_blank"}
+to go deeper on this subject.
 
 [string_inquirer]: https://github.com/rails/rails/blob/master/activesupport/lib/active_support/string_inquirer.rb
 [metaprogramming-ruby-2]: https://www.amazon.com/gp/product/1941222129/ref=as_li_qf_asin_il_tl?ie=UTF8&tag=leigh0b-20&creative=9325&linkCode=as2&creativeASIN=1941222129&linkId=018450bb9619638d9531fd11c0c3b710

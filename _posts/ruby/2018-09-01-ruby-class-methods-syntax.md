@@ -411,7 +411,7 @@ class MyModel
 end
 ```
 
-... you are able to do `private` methods easily but you will have the same problem as with Option 1:
+...you are able to do `private` methods easily but you will have the same problem as with Option 1:
 "Too much knowledge around class". Plus it's super easy to lost context
 on what are class methods and where instance methods start when you have long
 enough file.
@@ -666,6 +666,6 @@ MyModule.what_is_your_quest
 
 ### sources
 
-* [The Ruby Object Model and Metaprogramming](https://pragprog.com/screencast/v-dtrubyom/the-ruby-object-model-and-metaprogramming)
-* [Rails concerns](http://api.rubyonrails.org/classes/ActiveSupport/Concern.html)
-* [Reddit Discussion](https://www.reddit.com/r/ruby/comments/8jblfm/ruby_class_methods_syntax/)
+* [The Ruby Object Model and Metaprogramming](https://pragprog.com/screencast/v-dtrubyom/the-ruby-object-model-and-metaprogramming){:target="_blank"}
+* [Rails concerns](http://api.rubyonrails.org/classes/ActiveSupport/Concern.html){:target="_blank"}
+* [Reddit Discussion](https://www.reddit.com/r/ruby/comments/8jblfm/ruby_class_methods_syntax/){:target="_blank"}

@@ -8,7 +8,7 @@ categories: rails
 
 # Introduction
 
-[Sidekiq][sidekiq-github] uses [Redis][redis-site] to store all of its job and operational data.
+[Sidekiq][sidekiq-github]{:target="_blank"} uses [Redis][redis-site]{:target="_blank"} to store all of its job and operational data.
 
 By default, Sidekiq tries to connect to Redis at `localhost:6379`. This typically works great during development but needs tuning in production.
 
@@ -63,7 +63,8 @@ TO:
 # bind 127.0.0.1 ::1
 ```
 
-Furthermore, if you wish to connect to your Redis server remotely you need to turn off redis protected mode. While still editing `/etc/redis/redis.conf` find `protected-mode yes` line and change it:
+Furthermore, if you wish to connect to your Redis server remotely you need to turn off redis protected mode.
+While still editing `/etc/redis/redis.conf` find `protected-mode yes` line and change it:
 
 ```
 FROM:
