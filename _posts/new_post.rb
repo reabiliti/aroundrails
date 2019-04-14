@@ -27,4 +27,6 @@ TEMPLATE
 filepath = "#{dirname}/#{filename}"
 File.write(filepath, template)
 
-puts "created #{filepath}"
+puts '---'.colorize(:yellow)
+puts "created #{filepath}".colorize(:yellow)
+puts '---'.colorize(:yellow)
