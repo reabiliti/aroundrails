@@ -93,7 +93,7 @@ Model.new(:production_backup, 'Description for production_backup') do
     keep = 7
   end
 
-  store_with S3 do |s3|
+  store_with S3, storage_id do |s3|
     # AWS Credentials
     s3.access_key_id     = 'my_access_key_id'
     s3.secret_access_key = 'my_secret_access_key'
@@ -106,7 +106,7 @@ Model.new(:production_backup, 'Description for production_backup') do
     s3.keep               = keep
   end
 
-  store_with Local do |local|
+  store_with Local, storage_id do |local|
     local.path       = "~/backups/#{storage_id.to_s}/"
     local.keep       = keep
   end
