@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'inputs'
 require 'date'
 require 'fileutils'
