@@ -84,7 +84,6 @@ DEPENDENCIES
   jekyll-last-modified-at
   jekyll-sitemap
   minima
-  tzinfo-data
 
 BUNDLED WITH
-   1.17.3
+   2.0.2
