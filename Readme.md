@@ -1,3 +1,8 @@
 # Around Rails
 
-To do
+## Run locally
+
+```shell script
+bundle
+bundle exec jekyll serve -b '/'
+```
