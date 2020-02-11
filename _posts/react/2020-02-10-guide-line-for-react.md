@@ -26,8 +26,7 @@ categories: react
 Так же обязательно описываем свойства компонянта, какие типы должны приходить и обязательны
 ли они. Если не обязательныб то необходимо указывать значения по умолчаниюб пример `NameOfComponent.js`:
 
-{% highlight jsx%}
-
+```jsx harmony
 import React from 'react'
 import { string } from 'prop-types'
 
@@ -57,8 +56,7 @@ NameOfComponent.propTypes = {
 }
 
 export default NameOfComponent
-
-{% endhighlight %}
+```
 
 В файле index.js для удобства экспортируем компонент:
 
